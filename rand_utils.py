@@ -1,26 +1,26 @@
 import numpy as np
 
 
-def get_rand_list(size: int) -> np.ndarray:
+def get_rand_list(size: int) -> np.array:
     return np.random.uniform(size=size)
 
 
-def _get_expected_value(randoms: np.ndarray, size: int) -> float:
+def _get_expected_value(randoms: np.array, size: int) -> float:
     return sum(randoms) / size
 
 
-def _get_dispersion(randoms: np.ndarray, size: int, expected: float) -> float:
+def _get_dispersion(randoms: np.array, size: int, expected: float) -> float:
     return sum((randoms - expected)**2) / size
 
 
-def _get_autocorrelation(randoms: np.ndarray, size: int, expected: float, dispersion: float) -> list:
+def _get_autocorrelation(randoms: np.array, size: int, expected: float, dispersion: float) -> list:
     denominator = dispersion * size
     autocorrelation = []
     for shift in range(size):
         numerator = 0.0
         cut_randoms = randoms[:size - shift]
         shifted_randoms = randoms[shift:]
-        numerator = numerator + sum((cut_randoms - expected) * (shifted_randoms * expected))
+        numerator = numerator + sum((cut_randoms - expected) * (shifted_randoms - expected))
         autocorrelation.append(numerator / denominator)
     return autocorrelation
 

@@ -26,20 +26,21 @@ def _get_autocorrelation(randoms: np.array, size: int, expected: float, dispersi
 
 
 def _get_polygon(randoms: np.array, size: int) -> np.array:
-    min_val = min(randoms)
-    max_val = max(randoms)
+    min_val = 0
+    max_val = 1
     step = (max_val - min_val) / 12
     rel_freqs = np.zeros(12)
     for val in randoms:
-        rel_freqs[(val-min_val) // step] += 1
+        rel_freqs[int((val-min_val) / step)] += 1
     rel_freqs = rel_freqs / size
-    return rel_freqs
+    return rel_freqs, [min_val+step*i for i in range(12)]
 
 
 def _get_steps(polygon: np.array) -> np.array:
     steps = np.zeros(13)
-    for i in range(len(polygon)-1):
+    for i in range(len(polygon)):
         steps[1+i] = sum(polygon[:i+1])
+    return steps, [1/24 + 1/12*i for i in range(13)]
 
 
 def get_specs(randoms: np.ndarray, full=False) -> dict:
@@ -51,10 +52,12 @@ def get_specs(randoms: np.ndarray, full=False) -> dict:
     if full:
         autocorrelation = _get_autocorrelation(randoms, size, expected_val, dispersion)
         specs['autocorrelation'] = autocorrelation
-        polygon = _get_polygon(randoms, size)
+        polygon, borders = _get_polygon(randoms, size)
         specs['polygon'] = polygon
-        steps = _get_steps(polygon)
+        specs['borders1'] = borders
+        steps, borders = _get_steps(polygon)
         specs['steps'] = steps
+        specs['borders2'] = borders
     return specs
 
 

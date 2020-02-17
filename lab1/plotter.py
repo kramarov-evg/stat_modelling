@@ -4,7 +4,7 @@ import numpy as np
 
 def plot_autocorrelation(correlation: list, show=True, save=False):
     plt.stem(correlation, linefmt='b-', markerfmt=' ', use_line_collection=True)
-    plt.ylim(-1.0, 1.0)
+    plt.ylim(-0.5, .5)
     plt.xlabel('shift')
     plt.ylabel('autocorrelation')
     if show:

@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def IRNUNI(ILOW: int, IUP: int, size=1):
+def uniform_int(ILOW: int, IUP: int, size=1):
     '''
     Returns int value IR,
     uniformly distributed in interval ILOW <= IR <= IUP
@@ -14,8 +14,8 @@ def IRNUNI(ILOW: int, IUP: int, size=1):
         return int((IUP - ILOW + 1) * u + ILOW)
     else:
         u = np.random.uniform(size=size)
-        return u.astype(int)
+        return ((IUP - ILOW + 1) * u + ILOW).astype(int)
 
 
-def IRNBIN():
+def binomial_int():
     pass

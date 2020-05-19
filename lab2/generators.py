@@ -56,6 +56,18 @@ def geom_int(p: float, size=1, algo=1):
     return (funcs[algo-1](p, size) if size > 1 else funcs[algo-1](p, size)[0])
 
 
+def poisson_int(mu: float, size=1, algo=1):
+    '''
+    Returns int value IR,
+    distributed according to poisson's law in interval 1 <= IR
+
+    If size is specified,
+    returns array of IRs with given size and same restrictions
+    '''
+    funcs = [poisson_int_accum, poisson_int_accum_advanced]
+    return (funcs[algo-1](mu, size) if size > 1 else funcs[algo-1](mu, size)[0])
+
+
 def geom_int_accum(p: float, size: int) -> np.ndarray:
     prob_values = np.array([np.random.uniform() for i in range(size)])
     values = np.zeros(size, dtype=np.int8)
@@ -93,9 +105,42 @@ def geom_int_accum_advanced(p: float, size: int) -> np.array:
     return np.array(r_vals).astype(np.int8) + 1
 
 
+def poisson_int_accum(mu: float, size: int) -> np.ndarray:
+    prob_values = np.array([np.random.uniform() for i in range(size)])
+    values = np.zeros(size, dtype=np.int8)
+
+    for i in range(size):
+        p_cur = math.e ** (-mu)
+        value = 0
+        while (prob_values[i] >= 0):
+            prob_values[i] -= p_cur
+            p_cur *= mu/(value+1)
+            value += 1
+        values[i] = value - 1
+
+    return values
+
+
+def poisson_int_accum_advanced(mu: float, size: int) -> np.ndarray:
+    limit = math.e ** (-mu)
+    values = np.zeros(size, dtype=np.int8)
+
+    for i in range(size):
+        value = 0
+        prod = 1
+        while (prod >= limit):
+            value += 1
+            prod *= np.random.uniform()
+        values[i] = value - 1
+
+    return values
+
+
 if __name__ == "__main__":
     print(uniform_int(0, 9, size=10))
     print(binomial_int(10, 0.5, size=10))
     print(geom_int(0.5, size=10, algo=1))
     print(geom_int(0.5, size=10, algo=2))
     print(geom_int(0.5, size=10, algo=3))
+    print(poisson_int(10, size=10, algo=1))
+    print(poisson_int(10, size=10, algo=2))

@@ -68,6 +68,31 @@ def poisson_int(mu: float, size=1, algo=1):
     return (funcs[algo-1](mu, size) if size > 1 else funcs[algo-1](mu, size)[0])
 
 
+def log_int(p: float, size=1):
+    '''
+    Returns int value IR,
+    distributed according to logarithmic law in interval 1 <= IR
+
+    If size is specified,
+    returns array of IRs with given size and same restrictions
+    '''
+    prob_values = np.array([np.random.uniform() for i in range(size)])
+    values = np.zeros(size, dtype=np.int8)
+
+    for i in range(size):
+        value = 1
+        p_cur = -1 / math.log(1-p) * p
+        prob_values[i] -= p_cur
+        while (prob_values[i] >= 0):
+            p_cur *= value
+            value += 1
+            p_cur *= p / value
+            prob_values[i] -= p_cur
+        values[i] = value
+
+    return values if size > 1 else values[0]
+
+
 def geom_int_accum(p: float, size: int) -> np.ndarray:
     prob_values = np.array([np.random.uniform() for i in range(size)])
     values = np.zeros(size, dtype=np.int8)
@@ -144,3 +169,4 @@ if __name__ == "__main__":
     print(geom_int(0.5, size=10, algo=3))
     print(poisson_int(10, size=10, algo=1))
     print(poisson_int(10, size=10, algo=2))
+    print(log_int(0.5, size=10))

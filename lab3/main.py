@@ -8,6 +8,7 @@ def visualize_stats(rands, name: str):
     specs = characteristics.get_specs(randoms=rands, name=name, full=True)
     plotter.plot_polygon(specs, save=True, show=True)
     plotter.plot_steps(specs, save=True, show=True)
+    print(specs['method'], '\t', specs['expected value'], '\t', specs['dispersion'], sep='')
 
 
 size = 10**4

@@ -12,8 +12,8 @@ def _get_dispersion(randoms: np.array, size: int, expected: float) -> float:
 def _get_polygon(randoms: np.array, size: int) -> tuple:
     min_val = randoms.min()
     max_val = randoms.max()
-    step = (max_val - min_val) / 100
-    steps = [min_val + i*step for i in range(101)]
+    step = (max_val - min_val) / 50
+    steps = [min_val + i*step for i in range(51)]
     return steps, randoms
 
 

@@ -22,7 +22,7 @@ for i in range(1, 3):
     rands = pois(10, size=size, algo=i)
     visualize_stats(rands, name='Poisson'+str(i))
 
-rands = uni(11, 100, size=size)
+rands = uni(1, 100, size=size)
 visualize_stats(rands, name='Uniform')
 
 rands = log(0.5, size=size)
